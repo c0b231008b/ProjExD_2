@@ -4,7 +4,7 @@ import sys
 import pygame as pg
 
 
-WIDTH, HEIGHT = 900, 600
+WIDTH, HEIGHT = 900, 700
 
 DELTA = {    #方向キー辞書
     pg.K_UP: (0, -5), 
@@ -14,7 +14,19 @@ DELTA = {    #方向キー辞書
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def check_bound(obj_rct):
 
+    """""
+    こうかとんRect,または、爆弾Rectの画面内外判定用の関数
+    引数：こうかとんRect,または、爆弾Rect
+    戻り値：横方向判定結果、縦方向判定結果　（True:画面内/False：画面外）
+    """""
+    yoko, tate = True, True #画面内
+    if obj_rct.left < 0 or WIDTH < obj_rct.right:
+        yoko = False
+    if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
+        tate = False
+    return yoko, tate
 
 
 def main():
@@ -23,7 +35,8 @@ def main():
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
     kk_rct = kk_img.get_rect()
-    kk_rct.center = 900, 400
+    kk_rct.center = 400, 400
+    #爆弾設定
     bd_imag = pg.Surface((20,20))
     bd_imag.set_colorkey((0,0,0))
     pg.draw.circle(bd_imag, (255, 0,0), (10,10),10)
@@ -46,6 +59,13 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
 
+        kk_rct.move_ip(sum_mv)
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+        screen.blit(kk_img, kk_rct)
+        
+
+
         # if key_lst[pg.K_UP]:
         #     sum_mv[1] -= 5
         # if key_lst[pg.K_DOWN]:
@@ -55,9 +75,17 @@ def main():
         # if key_lst[pg.K_RIGHT]:
         #     sum_mv[0] += 5
         kk_rct.move_ip(sum_mv)
-        bd_rct.move_ip(vx, vy)
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
+        # 爆弾の移動と表示
+        bd_rct.move_ip(vx, vy)       
         screen.blit(bd_imag, bd_rct)
+        yoko, tate = check_bound(bd_rct)
+        if not yoko:  # 横方向にはみ出てたら
+            vx *= -1
+        if not tate:  # 縦方向にはみ出てたら
+            vy *= -1
         pg.display.update()
         tmr += 1
         clock.tick(50)
