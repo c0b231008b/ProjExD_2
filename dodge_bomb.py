@@ -1,9 +1,10 @@
 import os
+import random
 import sys
 import pygame as pg
 
 
-WIDTH, HEIGHT = 1200, 600
+WIDTH, HEIGHT = 900, 600
 
 DELTA = {    #方向キー辞書
     pg.K_UP: (0, -5), 
@@ -23,6 +24,13 @@ def main():
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
+    bd_imag = pg.Surface((20,20))
+    bd_imag.set_colorkey((0,0,0))
+    pg.draw.circle(bd_imag, (255, 0,0), (10,10),10)
+    bd_rct = bd_imag .get_rect()
+    bd_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
+    vx, vy = +5, +5
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -47,7 +55,9 @@ def main():
         # if key_lst[pg.K_RIGHT]:
         #     sum_mv[0] += 5
         kk_rct.move_ip(sum_mv)
+        bd_rct.move_ip(vx, vy)
         screen.blit(kk_img, kk_rct)
+        screen.blit(bd_imag, bd_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)
