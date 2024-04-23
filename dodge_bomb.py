@@ -46,10 +46,17 @@ def main():
 
     clock = pg.time.Clock()
     tmr = 0
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+        
+        if kk_rct.colliderect(bd_rct):  #ゲームオーバー判定
+            print("GameOver")
+            return
+        
+
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()
