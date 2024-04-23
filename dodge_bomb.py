@@ -14,15 +14,12 @@ DELTA = {  # 移動量辞書（押下キー：移動量タプル）
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
-
-
 def draw_game_over_screen(screen):
     """
     こうかとんと爆弾が衝突した際の関数
     引数：画面screen
     戻り値：なし
     """
-
     screen.fill((0, 0, 0))  # 背景を黒に設定
     font = pg.font.Font(None, 36)    
     text = font.render("Game Over", True, (255, 255, 255))  # 白色の "Game Over" テキストを作成
@@ -43,11 +40,6 @@ def draw_game_over_screen(screen):
     time.sleep(5)  # 5秒待機
 
 
-
-
-
-
-
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     """
     こうかとんRect，または，爆弾Rectの画面内外判定用の関数
@@ -60,10 +52,6 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
         tate = False
     return yoko, tate
-
-
-
-
 
 
 def main():
@@ -94,8 +82,6 @@ def main():
             return
         screen.blit(bg_img, [0, 0])
 
-
-
     # こうかとんの移動と表示
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -118,9 +104,6 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
-
-
 if __name__ == "__main__":
     pg.init()
     main()
